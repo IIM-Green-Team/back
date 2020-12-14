@@ -1,0 +1,52 @@
+version: '3.7'
+services:
+  nginx:
+    container_name: nginx_green
+    hostname: nginx_green
+    build: ./containers/nginx
+    ports:
+      - '80:80'
+    volumes:
+      - './src/:/var/www'
+      - './config-nginx/:/etc/nginx/conf.d'
+
+  php:
+    container_name: php_green
+    hostname: php_green
+    build:
+      context: './'
+      dockerfile: 'containers/php/Dockerfile'
+    volumes:
+      - './src:/var/www'
+
+  redis:
+    container_name: redis_green
+    hostname: redis_green
+    build:
+      context: './'
+      dockerfile: 'containers/redis/Dockerfile'
+    command: redis-server --requirepass root
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+
+  mariadb:
+    container_name: mariadb_green
+    hostname: mariadb_green
+    build:
+      context: './'
+      dockerfile: 'containers/mariadb/Dockerfile'
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=apiGreen
+
+  adminer:
+    container_name: adminer_green
+    hostname: adminer_green
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
