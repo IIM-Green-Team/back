@@ -4,10 +4,13 @@ services:
     container_name: nginx_green
     hostname: nginx_green
     build: ./containers/nginx
+    depends_on: 
+      - php
     ports:
       - '80:80'
+    restart: always
     volumes:
-      - './src/:/var/www'
+      - './src/green.localhost:/var/www/green.localhost'
       - './config-nginx/:/etc/nginx/conf.d'
 
   php:
@@ -15,7 +18,10 @@ services:
     hostname: php_green
     build:
       context: './'
-      dockerfile: 'containers/php/Dockerfile'
+      dockerfile: 'containers/php/Dockerfile.production'
+    depends_on:
+      - mariadb
+    restart: always
     volumes:
       - './src:/var/www'
 
@@ -25,6 +31,8 @@ services:
     build:
       context: './'
       dockerfile: 'containers/redis/Dockerfile'
+      args:
+        DATABASE_HOSTNAME: mariadb_green
     command: redis-server --requirepass root
     ports:
       - "6379:6379"
