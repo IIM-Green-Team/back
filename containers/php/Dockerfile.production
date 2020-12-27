@@ -1,8 +1,5 @@
 FROM php:7.4-fpm
 
-ARG DATABASE_HOSTNAME
-ENV DATABASE_HOSTNAME ${DATABASE_HOSTNAME}
-
 RUN apt-get -qq update && apt-get install -y \
     git \
     cpp \
@@ -41,6 +38,8 @@ COPY ./src/green.localhost/composer.json ./src/green.localhost/composer.lock ./
 RUN composer install
 
 COPY ./src/green.localhost ./
+
+# RUN composer dump-env prod --empty
 
 # CMD bin/console doctrine:migrations:migrate && php-fpm 
 CMD php-fpm 
