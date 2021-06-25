@@ -22,9 +22,18 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('@EasyAdmin/page/login.html.twig', [
+            'error' => $error,
+            'last_username' => $lastUsername,
+            'translation_domain' => 'admin',
+            'page_title' => 'Backend Access login',
+            'csrf_token_intention' => 'authenticate',
+            'username_label' => 'Identifiant',
+            'password_label' => 'Mot de passe',
+            'sign_in_label' => 'Se connecter',
+        ]);
     }
+
 
     /**
      * @Route("/logout", name="app_logout")

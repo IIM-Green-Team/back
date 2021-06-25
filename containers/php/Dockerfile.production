@@ -30,4 +30,18 @@ RUN docker-php-ext-install \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-WORKDIR /var/www/green.localhost
+WORKDIR /usr/src/app
+
+# Using cache
+COPY ./src/green.localhost/composer.json ./src/green.localhost/composer.lock ./
+
+RUN composer install
+
+COPY ./src/green.localhost ./
+
+# RUN composer dump-env prod --empty
+
+# CMD bin/console doctrine:migrations:migrate && php-fpm 
+CMD php-fpm 
+
+EXPOSE 9000

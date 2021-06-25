@@ -1,0 +1,5 @@
+.DS_Store
+./src/green.localhost/vendor
+./src/green.localhost/var
+./src/green.localhost/.env
+./src/green.localhost/.env.*
